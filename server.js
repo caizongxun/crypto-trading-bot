@@ -12,8 +12,8 @@ const LOGS_FILE = 'trading_logs.json';
 
 let STATE = {
     isPaused: false,
-    balance: 10000,
-    initialBalance: 10000,
+    balance: 1000,
+    initialBalance: 1000,
     positions: {},
     trades: [],
     priceHistory: {},
