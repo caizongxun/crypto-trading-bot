@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 Crypto Trading Bot v4 - 實時自動交易模擬器</title>
+    <title>🚀 Crypto Trading Bot v5 - 全自動多策略交易機器人</title>
     <style>
         :root {
             --bg-primary: #0a0e27;
@@ -36,7 +36,7 @@
 
         .container {
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 350px 1fr;
             gap: 20px;
             padding: 20px;
             height: 100vh;
@@ -61,27 +61,27 @@
         }
 
         .section-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border-bottom: 2px solid var(--accent-primary);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             letter-spacing: 1px;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         label {
             display: block;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -89,12 +89,12 @@
 
         input, select {
             width: 100%;
-            padding: 8px 10px;
+            padding: 6px 8px;
             background-color: rgba(15, 52, 96, 0.6);
             border: 1px solid var(--accent-primary);
-            border-radius: 6px;
+            border-radius: 4px;
             color: var(--text-primary);
-            font-size: 11px;
+            font-size: 10px;
             transition: all 0.3s ease;
         }
 
@@ -105,51 +105,49 @@
             background-color: rgba(15, 52, 96, 0.8);
         }
 
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        button {
-            padding: 10px 14px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
-            color: var(--bg-primary);
-            border: none;
+        .strategy-list {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
+            padding: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .strategy-item {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 9px;
+        }
+
+        .strategy-item:last-child {
+            border-bottom: none;
+        }
+
+        .strategy-item input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
-        }
-
-        button.danger {
-            background: linear-gradient(135deg, var(--accent-danger), #ff6666);
-            grid-column: 1 / -1;
         }
 
         .stat-box {
             background: linear-gradient(135deg, var(--bg-tertiary), rgba(0, 212, 255, 0.1));
             border-left: 4px solid var(--accent-cyan);
-            padding: 12px;
+            padding: 10px;
             border-radius: 6px;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border: 1px solid var(--accent-primary);
         }
 
         .stat-box-value {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 800;
-            margin: 6px 0;
+            margin: 4px 0;
             background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -157,17 +155,17 @@
         }
 
         .stat-box-label {
-            font-size: 9px;
+            font-size: 8px;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .trading-section {
             background: linear-gradient(135deg, rgba(22, 33, 62, 0.8), rgba(15, 52, 96, 0.8));
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
         }
@@ -176,42 +174,42 @@
             background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 14px;
-            margin-bottom: 14px;
+            font-size: 13px;
+            margin-bottom: 12px;
         }
 
         .price-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
         .price-item {
             background: rgba(0, 212, 255, 0.05);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
+            border-radius: 6px;
+            padding: 8px;
             text-align: center;
         }
 
         .price-item .crypto-name {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--accent-primary);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .price-item .price {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--accent-success);
             font-family: 'Courier New', monospace;
         }
 
         .price-item .change {
-            font-size: 10px;
-            margin-top: 3px;
+            font-size: 9px;
+            margin-top: 2px;
         }
 
         .price-item .change.positive {
@@ -226,7 +224,7 @@
             background: linear-gradient(135deg, rgba(22, 33, 62, 0.8), rgba(15, 52, 96, 0.8));
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
             max-height: 500px;
@@ -237,17 +235,17 @@
             background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 14px;
-            margin-bottom: 14px;
+            font-size: 13px;
+            margin-bottom: 12px;
         }
 
         .trade-item {
             background: rgba(0, 212, 255, 0.05);
             border-left: 3px solid var(--accent-success);
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 11px;
+            margin-bottom: 8px;
+            font-size: 10px;
         }
 
         .trade-item.loss {
@@ -258,30 +256,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 600;
         }
 
         .trade-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 4px;
             color: var(--text-secondary);
         }
 
         .trade-detail-item {
-            font-size: 10px;
+            font-size: 9px;
         }
 
         .trade-detail-label {
             color: var(--text-secondary);
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .trade-detail-value {
             color: var(--accent-primary);
             font-weight: 600;
             font-family: 'Courier New', monospace;
+            font-size: 8px;
         }
 
         .trade-detail-item.positive .trade-detail-value {
@@ -296,17 +295,17 @@
             background: rgba(10, 14, 39, 0.8);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 14px;
-            height: 300px;
+            padding: 12px;
+            height: 250px;
             overflow-y: auto;
-            font-size: 10px;
+            font-size: 8px;
             font-family: 'Courier New', monospace;
             box-shadow: var(--shadow);
         }
 
         .log-entry {
-            margin-bottom: 5px;
-            padding: 5px 8px;
+            margin-bottom: 3px;
+            padding: 3px 6px;
             border-left: 2px solid var(--border-color);
             background: rgba(0, 212, 255, 0.05);
             color: var(--text-secondary);
@@ -333,22 +332,22 @@
             display: flex;
             gap: 0;
             border-bottom: 2px solid var(--border-color);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             overflow-x: auto;
         }
 
         .tab-btn {
-            padding: 10px 16px;
+            padding: 8px 12px;
             background: none;
             color: var(--text-secondary);
             border: none;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             white-space: nowrap;
         }
 
@@ -369,9 +368,9 @@
             background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             letter-spacing: 2px;
         }
 
@@ -403,7 +402,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .status-box {
@@ -413,9 +412,40 @@
         }
 
         .status-text {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--accent-cyan);
             font-weight: 700;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, var(--accent-danger), #ff6666);
+            grid-column: 1 / -1;
         }
 
         @media (max-width: 1200px) {
@@ -448,10 +478,10 @@
         }
 
         .update-time {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-secondary);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -459,17 +489,17 @@
     <div class="container">
         <!-- SIDEBAR -->
         <div class="sidebar">
-            <h2 style="font-size: 16px; margin-bottom: 16px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚙️ 交易設定</h2>
+            <h2 style="font-size: 14px; margin-bottom: 12px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚙️ 全自動配置</h2>
 
             <div class="section-title">初始設定</div>
             <div class="form-group">
                 <label>初始資金 ($)</label>
-                <input type="number" id="initialCapital" value="5000" min="100" step="100">
+                <input type="number" id="initialCapital" value="10000" min="100" step="100">
             </div>
 
             <div class="form-group">
                 <label>單筆投入比例 (%)</label>
-                <input type="number" id="positionSize" value="5" min="0.5" max="20" step="0.5">
+                <input type="number" id="positionSize" value="3" min="0.5" max="20" step="0.5">
             </div>
 
             <div class="form-group">
@@ -488,38 +518,42 @@
                 <input type="number" id="takeProfit" value="8" min="1" max="30" step="1">
             </div>
 
-            <div class="form-group">
-                <label>最大回撤限制 (%)</label>
-                <input type="number" id="maxDrawdown" value="15" min="1" max="50" step="1">
-            </div>
-
-            <div class="section-title">策略設定</div>
-            <div class="form-group">
-                <label>主動策略</label>
-                <select id="strategySelect">
-                    <option value="ptsi" selected>🔴 PTSI - 價格時間對稱性</option>
-                    <option value="ptsia">🟠 PTSIA - 自適應PTSI</option>
-                    <option value="ptsim">🟡 PTSIM - 動量增強</option>
-                    <option value="ptsiv">🟢 PTSIV - 成交量加權</option>
-                </select>
-            </div>
-
+            <div class="section-title">監控設定</div>
             <div class="form-group">
                 <label>檢查間隔 (秒)</label>
                 <input type="number" id="checkInterval" value="60" min="10" max="600" step="10">
             </div>
 
-            <div class="button-group">
-                <button onclick="startTrading()">▶ 開始交易</button>
-                <button onclick="stopTrading()">⏹ 停止交易</button>
+            <div class="section-title">啟用策略</div>
+            <div class="strategy-list">
+                <div class="strategy-item">
+                    <input type="checkbox" id="strategy-ptsi" checked>
+                    <label for="strategy-ptsi" style="margin: 0; cursor: pointer;">🔴 PTSI</label>
+                </div>
+                <div class="strategy-item">
+                    <input type="checkbox" id="strategy-ptsia" checked>
+                    <label for="strategy-ptsia" style="margin: 0; cursor: pointer;">🟠 PTSIA</label>
+                </div>
+                <div class="strategy-item">
+                    <input type="checkbox" id="strategy-ptsim" checked>
+                    <label for="strategy-ptsim" style="margin: 0; cursor: pointer;">🟡 PTSIM</label>
+                </div>
+                <div class="strategy-item">
+                    <input type="checkbox" id="strategy-ptsiv" checked>
+                    <label for="strategy-ptsiv" style="margin: 0; cursor: pointer;">🟢 PTSIV</label>
+                </div>
             </div>
 
-            <button class="danger" onclick="resetTrading()">🔄 重置全部</button>
+            <div class="button-group">
+                <button id="pauseBtn" onclick="togglePause()">⏸ 暫停</button>
+                <button id="resumeBtn" onclick="togglePause()" style="display: none;">▶ 恢復</button>
+                <button class="danger" onclick="resetTrading()">🔄 重置</button>
+            </div>
 
-            <div class="section-title" style="margin-top: 16px;">即時統計</div>
+            <div class="section-title" style="margin-top: 12px;">即時統計</div>
             <div class="stat-box">
                 <div class="stat-box-label">目前資金</div>
-                <div class="stat-box-value" id="currentBalance">$5,000</div>
+                <div class="stat-box-value" id="currentBalance">$10,000</div>
             </div>
             <div class="stat-box">
                 <div class="stat-box-label">浮動收益</div>
@@ -533,20 +567,24 @@
                 <div class="stat-box-label">勝率</div>
                 <div class="stat-box-value" id="winRate">0%</div>
             </div>
+            <div class="stat-box">
+                <div class="stat-box-label">活躍頭寸</div>
+                <div class="stat-box-value" id="activePositions">0</div>
+            </div>
 
             <div class="update-time">
-                <div style="font-size: 9px; color: var(--text-secondary); margin-bottom: 4px;">最後更新</div>
-                <div id="lastUpdate" style="font-size: 11px; color: var(--accent-primary); font-weight: 600;">--:--:--</div>
+                <div style="font-size: 8px; color: var(--text-secondary); margin-bottom: 3px;">最後更新</div>
+                <div id="lastUpdate" style="font-size: 10px; color: var(--accent-primary); font-weight: 600;">--:--:--</div>
             </div>
         </div>
 
         <!-- MAIN CONTENT -->
         <div class="main-content">
             <div class="header-info">
-                <h1>📊 Crypto Trading Bot v4 - 實時自動交易</h1>
+                <h1>🤖 Crypto Trading Bot v5 - 全自動多策略</h1>
                 <div class="status-box">
-                    <span class="status-indicator stopped" id="statusIndicator"></span>
-                    <span class="status-text" id="statusText">準備就緒</span>
+                    <span class="status-indicator running" id="statusIndicator"></span>
+                    <span class="status-text" id="statusText">運行中</span>
                 </div>
             </div>
 
@@ -554,7 +592,7 @@
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('trading')">💱 即時交易</button>
                 <button class="tab-btn" onclick="switchTab('prices')">💹 價格監控</button>
-                <button class="tab-btn" onclick="switchTab('trades')">📋 持倉明細</button>
+                <button class="tab-btn" onclick="switchTab('positions')">📊 持倉明細</button>
                 <button class="tab-btn" onclick="switchTab('history')">📜 交易歷史</button>
                 <button class="tab-btn" onclick="switchTab('logs')">📝 系統日誌</button>
             </div>
@@ -568,7 +606,7 @@
                     </div>
                     <div class="active-trades">
                         <h3>💼 主動頭寸</h3>
-                        <div id="activeTradesContainer" style="font-size: 11px; color: var(--text-secondary);">暫無主動頭寸</div>
+                        <div id="activeTradesContainer" style="font-size: 10px; color: var(--text-secondary);">暫無主動頭寸</div>
                     </div>
                 </div>
             </div>
@@ -577,15 +615,15 @@
             <div id="prices" class="tab-content">
                 <div class="trading-section">
                     <h3>💰 所有交易對價格</h3>
-                    <div class="price-grid" id="fullPriceGrid" style="grid-template-columns: repeat(5, 1fr);"></div>
+                    <div class="price-grid" id="fullPriceGrid" style="grid-template-columns: repeat(6, 1fr);"></div>
                 </div>
             </div>
 
             <!-- 持倉明細 -->
-            <div id="trades" class="tab-content">
+            <div id="positions" class="tab-content">
                 <div class="trading-section">
                     <h3>📊 當前開倉位置</h3>
-                    <div id="holdingsList" style="font-size: 11px; color: var(--text-secondary);">暫無開倉</div>
+                    <div id="holdingsList" style="font-size: 10px; color: var(--text-secondary);">暫無開倉</div>
                 </div>
             </div>
 
@@ -593,14 +631,14 @@
             <div id="history" class="tab-content">
                 <div class="trading-section">
                     <h3>📜 已平倉交易紀錄</h3>
-                    <div id="historyList" style="font-size: 11px; color: var(--text-secondary); max-height: 400px; overflow-y: auto;"></div>
+                    <div id="historyList" style="font-size: 10px; color: var(--text-secondary); max-height: 400px; overflow-y: auto;"></div>
                 </div>
             </div>
 
             <!-- 系統日誌 -->
             <div id="logs" class="tab-content">
                 <div class="log-container" id="logContainer"></div>
-                <div style="margin-top: 12px;">
+                <div style="margin-top: 10px;">
                     <button onclick="clearLogs()" style="width: 100%;">🗑️ 清除日誌</button>
                 </div>
             </div>
@@ -620,7 +658,9 @@
                 { id: 'polkadot', symbol: 'DOT', name: 'Polkadot' },
                 { id: 'dogecoin', symbol: 'DOGE', name: 'Dogecoin' },
                 { id: 'polygon', symbol: 'MATIC', name: 'Polygon' },
-                { id: 'chainlink', symbol: 'LINK', name: 'Chainlink' }
+                { id: 'chainlink', symbol: 'LINK', name: 'Chainlink' },
+                { id: 'litecoin', symbol: 'LTC', name: 'Litecoin' },
+                { id: 'monero', symbol: 'XMR', name: 'Monero' }
             ],
             STRATEGY_PARAMS: {
                 ptsi: { period: 20, buyThreshold: 20, sellThreshold: 80 },
@@ -631,23 +671,26 @@
         };
 
         const STATE = {
-            isTrading: false,
-            balance: 5000,
-            initialBalance: 5000,
+            isPaused: false,
+            balance: 10000,
+            initialBalance: 10000,
             positions: {},
             trades: [],
             priceHistory: {},
             priceIndicators: {},
             tradeId: 0,
-            lastCheckTime: null,
-            tradingInterval: null
+            tradingInterval: null,
+            enabledStrategies: { ptsi: true, ptsia: true, ptsim: true, ptsiv: true }
         };
 
-        // Initialize price history
+        // Initialize
         CONFIG.CRYPTOS.forEach(crypto => {
             STATE.priceHistory[crypto.id] = [];
             STATE.priceIndicators[crypto.id] = null;
         });
+
+        addLog('🚀 Crypto Trading Bot v5 已啟動 - 全自動多策略交易機器人!', 'info');
+        addLog('💡 機器人正在後台無間斷運行所有啟用的策略', 'info');
 
         // ==================== UI FUNCTIONS ====================
         function switchTab(tabName) {
@@ -673,8 +716,7 @@
             logContainer.appendChild(entry);
             logContainer.scrollTop = logContainer.scrollHeight;
             
-            // 限制日誌數量
-            if (logContainer.children.length > 300) {
+            if (logContainer.children.length > 500) {
                 logContainer.removeChild(logContainer.firstChild);
             }
         }
@@ -694,7 +736,6 @@
         }
 
         function updateUI() {
-            // 更新統計資料
             let floatingPnL = 0;
             let realizedPnL = 0;
 
@@ -721,6 +762,7 @@
             document.getElementById('floatingPnL').textContent = formatCurrency(floatingPnL);
             document.getElementById('realizedPnL').textContent = formatCurrency(realizedPnL);
             document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
+            document.getElementById('activePositions').textContent = Object.values(STATE.positions).filter(p => p).length;
             document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('zh-TW');
 
             updatePriceDisplay();
@@ -769,7 +811,7 @@
             const holdings = Object.values(STATE.positions).filter(p => p);
             
             if (holdings.length === 0) {
-                list.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">暫無開倉</div>';
+                list.innerHTML = '<div style="text-align: center; padding: 15px; color: var(--text-secondary);">暫無開倉</div>';
                 return;
             }
 
@@ -794,20 +836,12 @@
                                 <div class="trade-detail-value">$${pos.currentPrice.toFixed(2)}</div>
                             </div>
                             <div class="trade-detail-item">
-                                <div class="trade-detail-label">數量</div>
-                                <div class="trade-detail-value">${pos.quantity.toFixed(4)}</div>
+                                <div class="trade-detail-label">策略</div>
+                                <div class="trade-detail-value">${pos.strategy}</div>
                             </div>
                             <div class="trade-detail-item">
                                 <div class="trade-detail-label">槓桿</div>
                                 <div class="trade-detail-value">${pos.leverage}x</div>
-                            </div>
-                            <div class="trade-detail-item ${unrealizedPnL >= 0 ? 'positive' : 'negative'}">
-                                <div class="trade-detail-label">未實現P&L</div>
-                                <div class="trade-detail-value">${formatCurrency(unrealizedPnL)}</div>
-                            </div>
-                            <div class="trade-detail-item">
-                                <div class="trade-detail-label">時間</div>
-                                <div class="trade-detail-value" style="font-size: 9px;">${new Date(pos.entryTime).toLocaleTimeString('zh-TW')}</div>
                             </div>
                         </div>
                     </div>
@@ -820,11 +854,11 @@
             const holdings = Object.values(STATE.positions).filter(p => p);
             
             if (holdings.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">暫無主動頭寸</div>';
+                container.innerHTML = '<div style="text-align: center; padding: 15px; color: var(--text-secondary);">暫無主動頭寸</div>';
                 return;
             }
 
-            container.innerHTML = holdings.slice(0, 3).map(pos => {
+            container.innerHTML = holdings.slice(0, 5).map(pos => {
                 const unrealizedPnL = (pos.currentPrice - pos.entryPrice) * pos.quantity * pos.leverage;
                 const pnlPercent = (unrealizedPnL / pos.entryPrice) * 100;
 
@@ -834,15 +868,8 @@
                             <strong>${pos.symbol}</strong>
                             <span style="color: ${unrealizedPnL >= 0 ? 'var(--accent-success)' : 'var(--accent-danger)'}">${pnlPercent.toFixed(2)}%</span>
                         </div>
-                        <div class="trade-details">
-                            <div class="trade-detail-item">
-                                <div class="trade-detail-label">進場價</div>
-                                <div class="trade-detail-value">$${pos.entryPrice.toFixed(2)}</div>
-                            </div>
-                            <div class="trade-detail-item">
-                                <div class="trade-detail-label">現價</div>
-                                <div class="trade-detail-value">$${pos.currentPrice.toFixed(2)}</div>
-                            </div>
+                        <div style="font-size: 8px; color: var(--text-secondary); margin-top: 3px;">
+                            策略: ${pos.strategy} | 進: $${pos.entryPrice.toFixed(2)} → 現: $${pos.currentPrice.toFixed(2)}
                         </div>
                     </div>
                 `;
@@ -854,22 +881,22 @@
             const closed = STATE.trades.filter(t => t.exitPrice);
 
             if (closed.length === 0) {
-                list.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">暫無已平倉交易</div>';
+                list.innerHTML = '<div style="text-align: center; padding: 15px; color: var(--text-secondary);">暫無已平倉交易</div>';
                 return;
             }
 
-            list.innerHTML = closed.slice(-20).reverse().map(trade => {
+            list.innerHTML = closed.slice(-30).reverse().map(trade => {
                 const returnPercent = (trade.pnl / trade.entryPrice) * 100;
                 const pnlClass = trade.pnl >= 0 ? 'positive' : 'negative';
 
                 return `
-                    <div class="trade-item ${pnlClass}" style="border-left-color: ${trade.pnl >= 0 ? 'var(--accent-success)' : 'var(--accent-danger)'}; margin-bottom: 8px;">
+                    <div class="trade-item ${pnlClass}" style="border-left-color: ${trade.pnl >= 0 ? 'var(--accent-success)' : 'var(--accent-danger)'}; margin-bottom: 6px;">
                         <div class="trade-header">
                             <strong>${trade.symbol} #${trade.id}</strong>
                             <span style="color: ${trade.pnl >= 0 ? 'var(--accent-success)' : 'var(--accent-danger)'}">${returnPercent.toFixed(2)}%</span>
                         </div>
-                        <div style="font-size: 10px; color: var(--text-secondary); margin-top: 6px;">
-                            進: $${trade.entryPrice.toFixed(2)} → 出: $${trade.exitPrice.toFixed(2)} | 損益: ${formatCurrency(trade.pnl)}
+                        <div style="font-size: 8px; color: var(--text-secondary); margin-top: 2px;">
+                            ${trade.strategy} | 進: $${trade.entryPrice.toFixed(2)} → 出: $${trade.exitPrice.toFixed(2)} | ${formatCurrency(trade.pnl)}
                         </div>
                     </div>
                 `;
@@ -971,8 +998,6 @@
         }
 
         function checkAndExecuteTrades(prices) {
-            const strategy = document.getElementById('strategySelect').value;
-            const params = CONFIG.STRATEGY_PARAMS[strategy];
             const balance = STATE.balance;
             const positionSize = parseFloat(document.getElementById('positionSize').value) / 100;
             const maxLeverage = parseFloat(document.getElementById('maxLeverage').value);
@@ -982,22 +1007,17 @@
             CONFIG.CRYPTOS.forEach(crypto => {
                 if (!prices[crypto.id]) return;
 
-                // 更新價格歷史
                 if (!STATE.priceHistory[crypto.id]) {
                     STATE.priceHistory[crypto.id] = [];
                 }
                 STATE.priceHistory[crypto.id].push(prices[crypto.id]);
                 
-                // 保留最近100條數據
                 if (STATE.priceHistory[crypto.id].length > 100) {
                     STATE.priceHistory[crypto.id].shift();
                 }
 
-                // 計算指標
-                const indicator = calculateIndicator(crypto.id, strategy);
                 STATE.priceIndicators[crypto.id] = {
                     price: prices[crypto.id],
-                    indicator,
                     change: prices[crypto.id] - (STATE.priceIndicators[crypto.id]?.price || prices[crypto.id]),
                     prevPrice: STATE.priceIndicators[crypto.id]?.price || prices[crypto.id]
                 };
@@ -1012,51 +1032,57 @@
                     const unrealizedPercent = unrealizedPnL / pos.entryPrice;
 
                     if (unrealizedPercent <= -stopLoss || unrealizedPercent >= takeProfit) {
-                        closeTrade(posKey, prices[crypto.id], unrealizedPercent <= -stopLoss ? 'STOP_LOSS' : 'TAKE_PROFIT');
+                        closeTrade(posKey, prices[crypto.id], unrealizedPercent <= -stopLoss ? 'STOP_LOSS' : 'TAKE_PROFIT', pos.strategy);
                         return;
                     }
                 }
 
-                // 只在沒有開倉時生成信號
                 if (STATE.positions[posKey]) return;
-                if (!indicator) return;
 
-                // 生成買賣信號
-                if (indicator < params.buyThreshold) {
-                    // BUY 信號
-                    const buyAmount = balance * positionSize;
-                    const quantity = buyAmount / prices[crypto.id];
-                    
-                    STATE.tradeId++;
-                    STATE.positions[posKey] = {
-                        id: STATE.tradeId,
-                        symbol: crypto.symbol,
-                        cryptoId: crypto.id,
-                        entryPrice: prices[crypto.id],
-                        currentPrice: prices[crypto.id],
-                        quantity,
-                        leverage: maxLeverage,
-                        entryTime: Date.now(),
-                        indicator: indicator,
-                        side: 'LONG'
-                    };
+                // 執行所有啟用的策略
+                for (const [strategyName, enabled] of Object.entries(STATE.enabledStrategies)) {
+                    if (!enabled) continue;
 
-                    STATE.balance -= buyAmount;
-                    addLog(`📈 BUY ${crypto.symbol} @ $${prices[crypto.id].toFixed(2)} | 指標: ${indicator.toFixed(2)} | 數量: ${quantity.toFixed(4)}`, 'buy');
-                } 
-                else if (indicator > params.sellThreshold && STATE.positions[posKey]) {
-                    // SELL 信號 (平倉)
-                    closeTrade(posKey, prices[crypto.id], 'SIGNAL');
+                    const params = CONFIG.STRATEGY_PARAMS[strategyName];
+                    const indicator = calculateIndicator(crypto.id, strategyName);
+
+                    if (!indicator) continue;
+
+                    if (indicator < params.buyThreshold) {
+                        const buyAmount = balance * positionSize;
+                        const quantity = buyAmount / prices[crypto.id];
+                        
+                        STATE.tradeId++;
+                        STATE.positions[posKey] = {
+                            id: STATE.tradeId,
+                            symbol: crypto.symbol,
+                            cryptoId: crypto.id,
+                            entryPrice: prices[crypto.id],
+                            currentPrice: prices[crypto.id],
+                            quantity,
+                            leverage: maxLeverage,
+                            entryTime: Date.now(),
+                            strategy: strategyName,
+                            side: 'LONG'
+                        };
+
+                        STATE.balance -= buyAmount;
+                        addLog(`📈 BUY ${crypto.symbol} | ${strategyName.toUpperCase()} @ $${prices[crypto.id].toFixed(2)}`, 'buy');
+                        break;
+                    }
+                    else if (indicator > params.sellThreshold && STATE.positions[posKey]) {
+                        closeTrade(posKey, prices[crypto.id], 'SIGNAL', strategyName);
+                        break;
+                    }
                 }
             });
         }
 
-        function closeTrade(posKey, exitPrice, reason) {
+        function closeTrade(posKey, exitPrice, reason, strategy) {
             const pos = STATE.positions[posKey];
             if (!pos) return;
 
             const pnl = (exitPrice - pos.entryPrice) * pos.quantity * pos.leverage;
-            const returnPercent = (pnl / pos.entryPrice) * 100;
 
             const trade = {
                 id: pos.id,
@@ -1068,7 +1094,7 @@
                 entryTime: pos.entryTime,
                 exitTime: Date.now(),
                 pnl: pnl,
-                returnPercent: returnPercent,
+                strategy: pos.strategy,
                 reason: reason
             };
 
@@ -1077,13 +1103,12 @@
             
             delete STATE.positions[posKey];
 
-            const logType = pnl >= 0 ? 'sell' : 'sell';
-            addLog(`📉 SELL ${pos.symbol} @ $${exitPrice.toFixed(2)} | P&L: ${formatCurrency(pnl)} (${returnPercent.toFixed(2)}%) | 原因: ${reason}`, logType);
+            const pnlStr = pnl >= 0 ? `+${formatCurrency(pnl)}` : formatCurrency(pnl);
+            addLog(`📉 SELL ${pos.symbol} @ $${exitPrice.toFixed(2)} | P&L: ${pnlStr}`, 'sell');
         }
 
-        // ==================== 主交易迴圈 ====================
         async function tradingLoop() {
-            if (!STATE.isTrading) return;
+            if (STATE.isPaused) return;
 
             const prices = await fetchPrices();
             if (prices) {
@@ -1092,75 +1117,78 @@
             }
         }
 
-        function startTrading() {
-            if (STATE.isTrading) return;
-
-            STATE.isTrading = true;
-            STATE.initialBalance = parseFloat(document.getElementById('initialCapital').value);
-            STATE.balance = STATE.initialBalance;
-            STATE.positions = {};
-            STATE.trades = [];
-            STATE.priceHistory = {};
-            STATE.tradeId = 0;
-
-            CONFIG.CRYPTOS.forEach(crypto => {
-                STATE.priceHistory[crypto.id] = [];
-            });
-
-            const interval = parseInt(document.getElementById('checkInterval').value) * 1000;
+        function togglePause() {
+            STATE.isPaused = !STATE.isPaused;
+            document.getElementById('pauseBtn').style.display = STATE.isPaused ? 'none' : 'block';
+            document.getElementById('resumeBtn').style.display = STATE.isPaused ? 'block' : 'none';
             
-            updateStatus('交易中...', true);
-            addLog('🚀 交易模擬已啟動', 'info');
-            addLog(`設定: 初始資金 $${STATE.initialBalance} | 檢查間隔 ${parseInt(document.getElementById('checkInterval').value)}秒`, 'info');
-
-            // 立即執行一次
-            tradingLoop();
-
-            // 定期執行
-            STATE.tradingInterval = setInterval(tradingLoop, interval);
-        }
-
-        function stopTrading() {
-            if (!STATE.isTrading) return;
-
-            STATE.isTrading = false;
-            clearInterval(STATE.tradingInterval);
-
-            updateStatus('已停止交易', false);
-            addLog('⏹ 交易已停止', 'info');
-
-            // 結算未平倉頭寸
-            const openPositions = Object.values(STATE.positions).filter(p => p);
-            if (openPositions.length > 0) {
-                addLog(`⚠️ 仍有 ${openPositions.length} 個未平倉頭寸`, 'info');
+            if (STATE.isPaused) {
+                updateStatus('已暫停', false);
+                addLog('⏸ 交易已暫停', 'info');
+            } else {
+                updateStatus('運行中', true);
+                addLog('▶ 交易已恢復', 'info');
             }
         }
 
         function resetTrading() {
-            stopTrading();
-            STATE.balance = 5000;
-            STATE.positions = {};
-            STATE.trades = [];
-            STATE.priceHistory = {};
-            STATE.priceIndicators = {};
-            STATE.tradeId = 0;
+            if (confirm('確定要重置所有交易數據嗎？')) {
+                STATE.balance = parseFloat(document.getElementById('initialCapital').value);
+                STATE.initialBalance = STATE.balance;
+                STATE.positions = {};
+                STATE.trades = [];
+                STATE.priceHistory = {};
+                STATE.priceIndicators = {};
+                STATE.tradeId = 0;
 
-            CONFIG.CRYPTOS.forEach(crypto => {
-                STATE.priceHistory[crypto.id] = [];
-                STATE.priceIndicators[crypto.id] = null;
-            });
+                CONFIG.CRYPTOS.forEach(crypto => {
+                    STATE.priceHistory[crypto.id] = [];
+                    STATE.priceIndicators[crypto.id] = null;
+                });
 
-            updateUI();
-            clearLogs();
-            addLog('🔄 交易已重置', 'info');
+                updateUI();
+                clearLogs();
+                addLog('🔄 交易已重置', 'info');
+            }
         }
 
-        // ==================== 初始化 ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            updateUI();
-            addLog('✨ Crypto Trading Bot v4 - 實時交易模擬器已就緒!', 'success');
-            addLog('💡 提示: 調整設定後點擊「▶ 開始交易」開始實時監控與自動交易', 'info');
+        // 更新啟用的策略
+        document.getElementById('strategy-ptsi').addEventListener('change', (e) => {
+            STATE.enabledStrategies.ptsi = e.target.checked;
         });
+        document.getElementById('strategy-ptsia').addEventListener('change', (e) => {
+            STATE.enabledStrategies.ptsia = e.target.checked;
+        });
+        document.getElementById('strategy-ptsim').addEventListener('change', (e) => {
+            STATE.enabledStrategies.ptsim = e.target.checked;
+        });
+        document.getElementById('strategy-ptsiv').addEventListener('change', (e) => {
+            STATE.enabledStrategies.ptsiv = e.target.checked;
+        });
+
+        // ==================== 初始化 & 啟動 ====================
+        STATE.initialBalance = parseFloat(document.getElementById('initialCapital').value);
+        STATE.balance = STATE.initialBalance;
+        updateUI();
+
+        // 立即執行一次
+        tradingLoop();
+
+        // 定期執行
+        STATE.tradingInterval = setInterval(() => {
+            const interval = parseInt(document.getElementById('checkInterval').value) * 1000;
+            tradingLoop();
+        }, 60000);
+
+        // 每分鐘調整間隔
+        setInterval(() => {
+            if (STATE.tradingInterval) clearInterval(STATE.tradingInterval);
+            const interval = parseInt(document.getElementById('checkInterval').value) * 1000;
+            STATE.tradingInterval = setInterval(tradingLoop, interval);
+        }, 60000);
+
+        // 定時更新 UI
+        setInterval(updateUI, 5000);
     </script>
 </body>
 </html>
