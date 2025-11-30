@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: crypto-trading-bot
+    env: static
+    buildCommand: echo "No build needed"
+    startCommand: "echo 'Static site ready'"
+    routes:
+      - path: /
+        filePath: index.html
