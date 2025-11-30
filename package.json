@@ -1,0 +1,9 @@
+{
+  "name": "crypto-trading-bot",
+  "version": "1.0.0",
+  "description": "Realtime Crypto Trading Bot with PTSI Strategy",
+  "scripts": {
+    "start": "echo 'Static site ready'"
+  },
+  "devDependencies": {}
+}
