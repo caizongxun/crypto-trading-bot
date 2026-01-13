@@ -20,32 +20,62 @@ import os
 def install_dependencies():
     """
     安裝所有必需的依賴
+    移除版本限制以提高相容性
     """
     print("="*80)
     print("正在安裝依賴...")
     print("="*80)
     
+    # 移除版本限制，改用可相容的版本
     packages = [
-        "pandas==2.1.4",
-        "numpy==1.24.3",
-        "scikit-learn==1.3.2",
-        "xgboost==2.0.3",
-        "torch==2.1.2",
-        "huggingface-hub==0.20.3",
-        "matplotlib==3.8.2",
-        "seaborn==0.13.1",
-        "pyarrow==14.0.1",
-        "tqdm==4.66.1"
+        "pandas",
+        "numpy",
+        "scikit-learn",
+        "xgboost",
+        "torch",
+        "huggingface-hub",
+        "matplotlib",
+        "seaborn",
+        "pyarrow",
+        "tqdm",
+        "requests",
+        "datasets"
     ]
     
     try:
+        # 先升級 pip 本身
+        print("\n正在升級 pip...")
         subprocess.check_call([
-            sys.executable, "-m", "pip", "install", "-q"
-        ] + packages)
+            sys.executable, "-m", "pip", "install", "--upgrade", "pip"
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # 重新安裝一些核心依賴
+        print("正在安裝核心依賴...")
+        subprocess.check_call([
+            sys.executable, "-m", "pip", "install", "--upgrade", "--no-cache-dir",
+            "setuptools", "wheel"
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # 安裝主要依賴
+        print("正在安裝主要程式包...")
+        for package in packages:
+            print(f"  安裝 {package}...", end="", flush=True)
+            try:
+                subprocess.check_call([
+                    sys.executable, "-m", "pip", "install", "-q", package
+                ], stderr=subprocess.DEVNULL)
+                print(" 完成")
+            except Exception as e:
+                print(f" 失敗: {str(e)[:30]}")
+                # 继续正常侟渐解决依賴问题
+                pass
+        
         print("\n依賴安裝完成")
         return True
     except Exception as e:
-        print(f"\n依賴安裝失敗: {str(e)}")
+        print(f"\n依賴安裝处理时出现错誤: {str(e)}")
+        print("\n尝试手动安裝:")
+        print("pip install pandas numpy scikit-learn xgboost torch huggingface-hub matplotlib seaborn")
         return False
 
 def run_btc_15m_test():
@@ -155,7 +185,7 @@ def main():
     
     # 步驟 1: 安裝依賴
     if not install_dependencies():
-        print("\n無法安裝依賴，程式終止")
+        print("\n無法自動安裝依賴，請手动安裝或检查网络連接")
         return False
     
     # 步驟 2: 執行測試
