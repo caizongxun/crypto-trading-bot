@@ -161,85 +161,72 @@ class CompositeIndicator:
     
     def _momentum_component(self, df: pd.DataFrame) -> pd.Series:
         """Calculate momentum score (-1 to 1)"""
-        rsi_signal = (df['rsi'] - 50) / 50  # Normalize RSI
+        rsi_signal = (df['rsi'] - 50) / 50
         macd_signal = np.sign(df['histogram']) * (abs(df['histogram']) / (abs(df['histogram']).rolling(20).max() + 1e-6))
         momentum_signal = np.sign(df['momentum'])
         roc_signal = np.sign(df['roc'])
         
-        # Weighted average
         score = 0.35 * rsi_signal + 0.35 * macd_signal + 0.20 * momentum_signal + 0.10 * roc_signal
         return score.fillna(0).clip(-1, 1)
     
     def _trend_component(self, df: pd.DataFrame) -> pd.Series:
         """Calculate trend score (-1 to 1)"""
-        # Price position relative to SMAs
         close_to_mid = (df['close'] - df['sma_20']) / (df['sma_20'] + 1e-6)
         close_to_lower = (df['close'] - df['bollinger_lower']) / (df['bollinger_mid'] + 1e-6)
         
-        # SMA alignment
         sma_alignment = np.sign(df['sma_20'] - df['sma_50'])
         
-        # Trend score
         score = 0.40 * close_to_mid.clip(-1, 1) + 0.30 * close_to_lower.clip(-1, 1) + 0.30 * sma_alignment
         return score.fillna(0).clip(-1, 1)
     
     def _volume_component(self, df: pd.DataFrame) -> pd.Series:
         """Calculate volume score (-1 to 1)"""
-        # Volume surge detection
-        volume_surge = np.log(df['volume_ratio'] + 1) / np.log(3)  # Log scale
+        volume_surge = np.log(df['volume_ratio'] + 1) / np.log(3)
         
-        # OBV trend
         obv_trend = np.sign(df['obv'] - df['obv_sma'])
         
-        # Volume score
         score = 0.60 * volume_surge.clip(-1, 1) + 0.40 * obv_trend
         return score.fillna(0).clip(-1, 1)
     
     def _volatility_component(self, df: pd.DataFrame) -> pd.Series:
         """Calculate volatility score (-1 to 1)"""
-        # ATR relative to price
-        atr_ratio = (df['atr'] / df['close']).clip(0, 0.1)  # Normalize
+        atr_ratio = (df['atr'] / df['close']).clip(0, 0.1)
         
-        # Bollinger Band width
-        bb_width = df['volatility'] / 0.1  # Expected normalized width ~0.1
+        bb_width = df['volatility'] / 0.1
         
-        # Volatility score (higher volatility with direction = higher opportunity)
         score = (atr_ratio + bb_width) / 2
         return score.fillna(0).clip(-1, 1)
     
     def _generate_signal(self, df: pd.DataFrame) -> pd.Series:
         """
         Generate trading signal: 1 (BUY), -1 (SELL), 0 (HOLD)
-        Based on previous candle data
+        Improved logic with better entry/exit conditions
         """
         signal = pd.Series(0, index=df.index)
         
-        # Shift all scores to use previous candle
         momentum_prev = df['momentum_score'].shift(1)
         trend_prev = df['trend_score'].shift(1)
         volume_prev = df['volume_score'].shift(1)
         volatility_prev = df['volatility_score'].shift(1)
+        rsi_prev = df['rsi'].shift(1)
+        macd_prev = df['macd'].shift(1)
+        histogram_prev = df['histogram'].shift(1)
         
-        # Composite score
         composite = (0.35 * momentum_prev + 
                     0.35 * trend_prev + 
                     0.20 * volume_prev + 
                     0.10 * volatility_prev)
         
-        # BUY Signal: Strong uptrend + volume + momentum
         buy_condition = (
-            (composite > 0.4) &
-            (volume_prev > 0.2) &
-            (momentum_prev > 0.2) &
-            (trend_prev > -0.3)
+            ((composite > 0.2) & (momentum_prev > 0.1) & (trend_prev > -0.5)) |
+            ((rsi_prev < 35) & (rsi_prev > 20)) |
+            ((macd_prev > 0) & (histogram_prev > 0) & (histogram_prev.shift(1) <= 0))
         )
         
-        # SELL Signal: Strong downtrend + volume + momentum
         sell_condition = (
-            (composite < -0.4) &
-            (volume_prev > 0.2) &
-            (momentum_prev < -0.2) &
-            (trend_prev < 0.3)
+            ((composite < -0.2) & (momentum_prev < -0.1) & (trend_prev < 0.5)) |
+            ((rsi_prev > 65) & (rsi_prev < 80)) |
+            ((macd_prev < 0) & (histogram_prev < 0) & (histogram_prev.shift(1) >= 0))
         )
         
         signal[buy_condition] = 1
@@ -252,10 +239,17 @@ class CompositeIndicator:
         momentum_prev = df['momentum_score'].shift(1)
         trend_prev = df['trend_score'].shift(1)
         volume_prev = df['volume_score'].shift(1)
+        rsi_prev = df['rsi'].shift(1)
         
-        # Strength based on agreement of indicators
         agreement = (abs(momentum_prev) + abs(trend_prev)) / 2
-        volume_boost = (volume_prev + 1) / 2  # 0.5 to 1.0 range
         
-        strength = agreement * volume_boost
+        rsi_extreme = np.where(
+            ((rsi_prev < 35) | (rsi_prev > 65)),
+            0.8,
+            0.5
+        )
+        
+        volume_boost = (volume_prev + 1) / 2
+        
+        strength = agreement * volume_boost * (rsi_extreme / 0.65)
         return strength.fillna(0).clip(0, 1)
